@@ -3,7 +3,7 @@ import json
 
 def get():
     url = 'https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/F-C0032-001?Authorization=CWA-49339B0E-BDC1-4DB9-9532-CA6E0DA5441C&downloadType=WEB&format=JSON'
-    data = requests.get(url)
+    data = requests.get(url, verify=False)
     data_json = data.json()
     location = data_json['cwaopendata']['dataset']['location']
 

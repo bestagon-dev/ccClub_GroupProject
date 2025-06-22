@@ -1,6 +1,19 @@
+#執行flask debug
+#flask --app=bot_server:app run --reload --debugger --host=0.0.0.0 --port=5000
+
 # import json
 import OOP_and_Function as fx
 import get
+from dotenv import load_dotenv
+import os
+
+#載入環境變數
+load_dotenv()
+#取得環境變數
+line_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
+line_secret = os.getenv("LINE_CHANNEL_SECRET")
+
+print(line_token,line_secret)
 
 #讀取天氣資料json檔
 # with open("mock_data.json", "r", encoding="utf-8") as f:
@@ -23,12 +36,13 @@ for city_data in weather_data:
         print(f"降雨機率：{city_data['rain_probability']}%")
 
 #地點名稱資料提取（為後續的穿搭推薦準備）
-# weather_dict={}
+weather_dict={}
 for city_data in weather_data:
     if city_data['city']==serching_city:
         weather_dict=fx.serch_city(serching_city,weather_data)
         break
 # print(weather_dict)
+
 
 #推薦衣著
 fx.what_to_wear(**weather_dict)
