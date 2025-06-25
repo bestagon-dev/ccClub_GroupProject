@@ -1,5 +1,5 @@
 #執行flask debug
-#flask --app=bot_server:app run --reload --debugger --host=0.0.0.0 --port=5000
+#flask --app=Line_bot_server:app run --reload --debugger --host=0.0.0.0 --port=5000
 
 # import json
 import OOP_and_Function as fx

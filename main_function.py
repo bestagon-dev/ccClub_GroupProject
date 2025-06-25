@@ -5,18 +5,18 @@ def main(location):
     weather_data=get.get()
     #地點名稱查詢
     weather_dict = {}
+    #標準化地點名稱
+    city_name=fx.standerdize_location(location)
+    if len(city_name)>4:
+        return city_name
     for city_data in weather_data:
-        if city_data['city']==location:
-            # print(f"{city_data['city']}今日{city_data['weather']}，天氣{city_data['comfort_index']}")
-            # print(f"最高溫度：{city_data['max_temp']}°C\n最低溫度：{city_data['min_temp']}")
-            # print(f"降雨機率：{city_data['rain_probability']}%")
-            if city_data['city'] == location:
-                weather_dict = fx.serch_city(location, weather_data)
-                break
+        if city_data['city']==city_name:
+            weather_dict = fx.serch_city(city_name, weather_data)
+            break
 
     # 如果沒找到資料
     if not weather_dict:
-        return f"找不到 {location} 的天氣資料喔！"
+        return f"找不到 {location} 的天氣資料喔！\n目前僅支援台灣縣市查詢，請輸入完整名稱(例如：臺中市)再次查詢。"
     
     weather_msg = (
         f"{weather_dict['city']} 今日 {weather_dict['weather']}，{weather_dict['comfort_index']}\n"

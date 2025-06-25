@@ -3,6 +3,39 @@ class weather_info:
     def __init__(self):
         pass
 
+#標準化地名
+def standerdize_location(raw):
+    location=raw.replace("台","臺")
+    #如果是三個字就直接回傳去查詢
+    if len(location)==3:
+        return location
+    
+    # 直轄市
+    municipalities = ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"]
+    # 縣
+    counties = ["宜蘭縣", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣", "嘉義縣", "屏東縣", "花蓮縣", "臺東縣", "澎湖縣"]
+    # 市
+    cities = ["基隆市", "新竹市", "嘉義市"]
+    #建立{前綴：全名}字典
+    prefix_dict = {}
+    for name in municipalities + counties + cities:
+        prefix = name[:2]
+        if prefix in prefix_dict:
+            prefix_dict[prefix].append(name)
+        else:
+            prefix_dict[prefix] = [name]
+
+    #模糊判斷，回傳標準地名
+    stander_location = prefix_dict.get(location, [])
+
+    if not stander_location:
+        return f"找不到 {raw} 的天氣資料喔！\n目前僅支援台灣縣市查詢，請輸入完整名稱(例如：臺中市)再次查詢。"
+
+    if len(stander_location) == 1:
+        return stander_location[0]
+    else:
+        return f"請問您要查詢 {stander_location[0]} 還是 {stander_location[1]}？"
+
 #把被查詢的城市資料寫入獨立的dict
 def serch_city(city, weather_data):
     for city_data in weather_data:
@@ -13,27 +46,37 @@ def serch_city(city, weather_data):
 
 #衣著推薦
 def what_to_wear(city,weather,max_temp,min_temp,comfort_index,rain_probability):
+    comfort_map = {
+        "舒適至易中暑": "\n容易中暑記得補水、防曬、多休息！",
+        "悶熱": "\n體感十分濕熱，衣著需更加輕薄、少層次！",
+        "舒適至悶熱": "\n體感較為濕熱，衣著可選較輕薄、少層次的！",
+        "稍有寒意": "\n稍有寒意，帶個薄外套更安心。",
+        "涼爽": "\n天氣涼爽，帶個薄外套更安心。",
+        "寒冷": "\n寒冷天氣，注意保暖。",
+    }
     wear_suggest=""
-    if max_temp>30:
-        wear_suggest='今天很熱，短袖短褲穿起來！外出記得帶水喔！'
-    elif max_temp>25:
-        wear_suggest='短袖＋薄長褲or裙子，適合戶外活動。'
-    elif max_temp>20:
-        wear_suggest='薄長袖、長褲'
-    elif max_temp>15:
-        wear_suggest='變冷了，可以穿個薄外套喔！'
-    elif max_temp>10:
-        wear_suggest='冷冷的，厚外套穿起來～'
+    if max_temp>=33:
+        wear_suggest='\n今天超熱，適合寬鬆涼爽的短袖上衣＋短褲／薄長裙！外出記得帶水跟注意防曬喔！'
+    elif max_temp>=30:
+        wear_suggest='\n氣溫較高，推薦透氣短袖上衣＋薄長褲or裙子!'
+    elif max_temp>=25:
+        wear_suggest='\n氣溫舒適，可以穿個短袖上衣＋長褲，記得帶個薄外套以防萬一！'
+    elif max_temp>=20:
+        wear_suggest='\n開始轉涼，可以穿個薄長袖＋薄外套喔！'
+    elif max_temp>=15:
+        wear_suggest='\n冷冷的，毛衣和厚外套是你的好夥伴～'
     else:
-        wear_suggest='冷爆了，唯一指定羽絨衣！'
+        wear_suggest='\n冷爆了，發熱衣＋厚外套，羽絨衣、圍巾、帽子、手套能上就上！'
 
-    if max_temp-min_temp>10:
-        wear_suggest+'早晚溫差大，建議多帶一件外套'
+    wear_suggest += comfort_map.get(comfort_index, "\n可依體感調整衣著:D")
+
+    if max_temp-min_temp>7:
+        wear_suggest+='\n早晚溫差大，建議洋蔥式穿法！'
     
-    if rain_probability>70:
-        wear_suggest+'高機率下雨，記得帶傘！'
-    elif rain_probability>40:
-        wear_suggest+'可能會下雨，建議帶個傘～'
+    if rain_probability>=70:
+        wear_suggest+='\n高機率下雨，記得帶傘或雨衣，穿不容易濕的鞋子！'
+    elif rain_probability>=40:
+        wear_suggest+='\n可能會下雨，建議帶個傘備用～'
     else:
-        wear_suggest+'天氣不錯，不用帶傘～'
+        wear_suggest+='\n天氣不錯，適合外出～'
     return wear_suggest

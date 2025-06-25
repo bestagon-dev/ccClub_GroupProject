@@ -1,0 +1,113 @@
+{
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "新竹市",
+          "weight": "bold",
+          "size": "xl",
+          "align": "center"
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": "🌧️多雲午後短暫雷陣雨",
+              "align": "center",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "🔥悶熱至易中暑",
+              "align": "center",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "🌡 最高：34°C／最低：30°C",
+              "align": "center",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "💧 降雨機率：30%\"",
+              "align": "center",
+              "wrap": true
+            }
+          ],
+          "spacing": "sm"
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": "  ＊＊＊＊＊＊＊＊＊＊＊＊＊",
+              "align": "center",
+              "style": "normal",
+              "weight": "regular",
+              "decoration": "none",
+              "gravity": "center",
+              "wrap": true
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": "👕 穿搭建議：",
+              "weight": "bold",
+              "align": "start",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "今天超熱，適合寬鬆涼爽的短袖上衣＋短褲／薄長裙！外出記得帶水跟注意防曬喔！",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "天氣不錯，適合外出～可依體感調整衣著:D",
+              "wrap": true
+            }
+          ],
+          "spacing": "sm",
+          "margin": "lg"
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "height": "sm",
+          "action": {
+            "type": "message",
+            "label": "設為常用城市",
+            "text": "save city"
+          },
+          "color": "#EA7500"
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [],
+          "margin": "sm"
+        }
+      ],
+      "flex": 0
+    }
+  }
