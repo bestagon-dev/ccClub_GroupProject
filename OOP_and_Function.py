@@ -34,7 +34,7 @@ def standerdize_location(raw):
     if len(stander_location) == 1:
         return stander_location[0]
     else:
-        return f"請問您要查詢 {stander_location[0]} 還是 {stander_location[1]}？"
+        return stander_location
 
 #把被查詢的城市資料寫入獨立的dict
 def serch_city(city, weather_data):
@@ -46,37 +46,41 @@ def serch_city(city, weather_data):
 
 #衣著推薦
 def what_to_wear(city,weather,max_temp,min_temp,comfort_index,rain_probability):
-    comfort_map = {
-        "舒適至易中暑": "\n容易中暑記得補水、防曬、多休息！",
-        "悶熱": "\n體感十分濕熱，衣著需更加輕薄、少層次！",
-        "舒適至悶熱": "\n體感較為濕熱，衣著可選較輕薄、少層次的！",
-        "稍有寒意": "\n稍有寒意，帶個薄外套更安心。",
-        "涼爽": "\n天氣涼爽，帶個薄外套更安心。",
-        "寒冷": "\n寒冷天氣，注意保暖。",
-    }
+    suggest_lst=[]
     wear_suggest=""
+    comfort_map = {
+        "舒適至易中暑": "容易中暑記得補水、防曬、多休息！",
+        "悶熱": "體感十分濕熱，衣著需更加輕薄、少層次！",
+        "舒適至悶熱": "體感較為濕熱，衣著可選較輕薄、少層次的！",
+        "稍有寒意": "稍有寒意，帶個薄外套更安心。",
+        "涼爽": "天氣涼爽，帶個薄外套更安心。",
+        "寒冷": "寒冷天氣，注意保暖。",
+    }
     if max_temp>=33:
-        wear_suggest='\n今天超熱，適合寬鬆涼爽的短袖上衣＋短褲／薄長裙！外出記得帶水跟注意防曬喔！'
+        suggest_lst=['今天超熱，適合寬鬆涼爽的短袖上衣＋短褲／薄長裙！外出記得帶水跟注意防曬喔！']
     elif max_temp>=30:
-        wear_suggest='\n氣溫較高，推薦透氣短袖上衣＋薄長褲or裙子!'
+        suggest_lst=['氣溫較高，推薦透氣短袖上衣＋薄長褲or裙子!']
     elif max_temp>=25:
-        wear_suggest='\n氣溫舒適，可以穿個短袖上衣＋長褲，記得帶個薄外套以防萬一！'
+        suggest_lst=['氣溫舒適，可以穿個短袖上衣＋長褲，記得帶個薄外套以防萬一！']
     elif max_temp>=20:
-        wear_suggest='\n開始轉涼，可以穿個薄長袖＋薄外套喔！'
+        suggest_lst=['開始轉涼，可以穿個薄長袖＋薄外套喔！']
     elif max_temp>=15:
-        wear_suggest='\n冷冷的，毛衣和厚外套是你的好夥伴～'
+        suggest_lst=['冷冷的，毛衣和厚外套是你的好夥伴～']
     else:
-        wear_suggest='\n冷爆了，發熱衣＋厚外套，羽絨衣、圍巾、帽子、手套能上就上！'
+        suggest_lst=['冷爆了，發熱衣＋厚外套，羽絨衣、圍巾、帽子、手套能上就上！']
 
-    wear_suggest += comfort_map.get(comfort_index, "\n可依體感調整衣著:D")
+    wear_suggest += comfort_map.get(comfort_index, "可依體感調整衣著:D")
 
     if max_temp-min_temp>7:
-        wear_suggest+='\n早晚溫差大，建議洋蔥式穿法！'
+        wear_suggest+='早晚溫差大，建議洋蔥式穿法！'
     
     if rain_probability>=70:
-        wear_suggest+='\n高機率下雨，記得帶傘或雨衣，穿不容易濕的鞋子！'
+        wear_suggest+='高機率下雨，記得帶傘或雨衣，穿不容易濕的鞋子！'
     elif rain_probability>=40:
-        wear_suggest+='\n可能會下雨，建議帶個傘備用～'
+        wear_suggest+='可能會下雨，建議帶個傘備用～'
     else:
-        wear_suggest+='\n天氣不錯，適合外出～'
-    return wear_suggest
+        wear_suggest+='天氣不錯，適合外出～'
+    
+    suggest_lst.append(wear_suggest)
+    return suggest_lst
+
