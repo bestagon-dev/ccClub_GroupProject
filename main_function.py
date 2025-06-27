@@ -55,6 +55,11 @@ def make_json(weather_reply):
           "type": "box",
           "layout": "vertical",
           "contents": [
+              {
+              "type": "separator",
+              "margin": "10px",
+              "color": "#AF6B26"
+            },
             {
               "type": "text",
               "text": weather_reply[1],
@@ -88,7 +93,7 @@ def make_json(weather_reply):
           "contents": [
             {
               "type": "text",
-              "text": "  ＊＊＊＊＊＊＊＊＊＊＊＊＊",
+              "text": "  ",
               "align": "center",
               "style": "normal",
               "color": "#AF6B26",
@@ -137,7 +142,7 @@ def make_json(weather_reply):
           "height": "sm",
           "action": {
             "type": "postback",
-            "label": "設為常用城市",
+            "label": "設為快速查詢城市",
             "data": f"set_city={weather_reply[0]}"
           },
           "color": "#EA7500"
@@ -153,7 +158,3 @@ def make_json(weather_reply):
     }
   }
     return weather_json
-
-#儲存使用者常用城市
-def save_city(user_id,city):
-    return 0

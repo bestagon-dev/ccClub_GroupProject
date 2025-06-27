@@ -4,7 +4,8 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, FlexSendMessage, PostbackEvent, QuickReply, QuickReplyButton, MessageAction
 from dotenv import load_dotenv
 import os
-import main_function as main
+from main_function import get_weather_data, make_json
+from storage import set_city, get_city
 
 # 載入 .env 檔案的環境變數
 load_dotenv()
@@ -35,8 +36,18 @@ def callback():
 def handle_message(event):
     user_text = event.message.text.strip()
     
+    #快速查詢，從json存取城市
+    if user_text=="快速查詢":
+        user_id = event.source.user_id
+        user_text = get_city(user_id)
+    if user_text == None:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="尚未設定城市，無法快速查詢ＱＱ")
+        )
+
     # 呼叫天氣查詢功能
-    weather_reply = main.get_weather_data(user_text)
+    weather_reply = get_weather_data(user_text)
 
     #有多種城市可能送出Quick reply
     if type(weather_reply)==list and len(weather_reply)==2:
@@ -51,7 +62,7 @@ def handle_message(event):
 
     #包裝成json
     elif type(weather_reply)==list:
-        weather_json=main.make_json(weather_reply)
+        weather_json=make_json(weather_reply)
 
         #包裝flex message
         message = FlexSendMessage(
@@ -80,11 +91,11 @@ def handle_postback(event):
         #取得使用者id
         user_id = event.source.user_id
         #存成json
-        main.save_city(user_id,city)
+        set_city(user_id,city)
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=f"已將『{city}』設為常用城市！")
+            TextSendMessage(text=f"已設定快速查詢城市『{city}』！")
         )
 
 if __name__ == "__main__":
