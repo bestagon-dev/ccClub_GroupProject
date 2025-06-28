@@ -62,6 +62,7 @@ def make_json(weather_reply):
             },
             {
               "type": "text",
+              "margin": "10px",
               "text": weather_reply[1],
               "align": "center",
               "wrap": True
@@ -142,7 +143,7 @@ def make_json(weather_reply):
           "height": "sm",
           "action": {
             "type": "postback",
-            "label": "設為快速查詢城市",
+            "label": "📌 設為快速查詢城市",
             "data": f"set_city={weather_reply[0]}"
           },
           "color": "#EA7500"
@@ -155,6 +156,167 @@ def make_json(weather_reply):
         }
       ],
       "flex": 0
+    },
+    "styles": {
+      "body": {
+        "backgroundColor": "#FFF4E6"
+      },
+      "footer": {
+        "backgroundColor": "#FFF4E6"
+      }
     }
   }
     return weather_json
+
+def instructions():
+    ins={
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "功能說明",
+        "weight": "bold",
+        "size": "3xl",
+        "color": "#A65F00",
+        "align": "center"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "separator",
+            "color": "#D9A066",
+            "margin": "10px"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "城市查詢",
+                "color": "#B36B00",
+                "flex": 2,
+                "size": "md"
+              },
+              {
+                "type": "text",
+                "text": "輸入城市名稱（例如：臺中市），就能查詢當地天氣🌤和穿搭建議👕唷～",
+                "wrap": True,
+                "color": "#5C4033",
+                "size": "md",
+                "flex": 5
+              }
+            ],
+            "margin": "10px"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "模糊比對",
+                "color": "#B36B00",
+                "flex": 2,
+                "size": "md"
+              },
+              {
+                "type": "text",
+                "text": "不記得全名也沒關係！支援前綴搜尋，只要輸入「新北」就能查新北市天氣～🧭",
+                "wrap": True,
+                "color": "#5C4033",
+                "size": "md",
+                "flex": 5
+              }
+            ],
+            "margin": "10px"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "自動判斷",
+                "color": "#B36B00",
+                "flex": 2,
+                "size": "md"
+              },
+              {
+                "type": "text",
+                "text": "輸入「新竹」、「嘉義」等同時有縣市的名稱時，會貼心跳出選項泡泡讓你選～🏞🏙",
+                "wrap": True,
+                "color": "#5C4033",
+                "size": "md",
+                "flex": 5
+              }
+            ],
+            "margin": "10px"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "快速查詢",
+                "color": "#B36B00",
+                "flex": 2,
+                "size": "md"
+              },
+              {
+                "type": "text",
+                "text": "點一下快捷選單的「快速查詢」按鈕，馬上查看您設定的常用城市！🚀📍",
+                "wrap": True,
+                "color": "#5C4033",
+                "size": "md",
+                "flex": 5
+              }
+            ],
+            "margin": "10px"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "設定城市",
+                "color": "#B36B00",
+                "flex": 2,
+                "size": "md"
+              },
+              {
+                "type": "text",
+                "text": "查完天氣後，點選天氣卡下方的「設為快速查詢城市」按鈕，就能存起來啦～⭐🏙",
+                "wrap": True,
+                "color": "#5C4033",
+                "size": "md",
+                "flex": 5
+              }
+            ],
+            "margin": "10px"
+          }
+        ]
+      }
+    ]
+  },
+  "styles": {
+    "body": {
+      "backgroundColor": "#FFF8F0"
+    }
+  }
+}
+    return ins

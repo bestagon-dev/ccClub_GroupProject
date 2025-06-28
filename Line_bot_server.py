@@ -4,7 +4,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, FlexSendMessage, PostbackEvent, QuickReply, QuickReplyButton, MessageAction
 from dotenv import load_dotenv
 import os
-from main_function import get_weather_data, make_json
+from main_function import get_weather_data, make_json, instructions
 from storage import set_city, get_city
 
 # 載入 .env 檔案的環境變數
@@ -36,8 +36,20 @@ def callback():
 def handle_message(event):
     user_text = event.message.text.strip()
     
+    #功能說明
+    if user_text=="功能說明":
+        message = FlexSendMessage(
+            alt_text="歡迎查看功能說明",
+            contents=instructions()
+        )
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            message
+        )
+
     #快速查詢，從json存取城市
-    if user_text=="快速查詢":
+    elif user_text=="快速查詢":
         user_id = event.source.user_id
         user_text = get_city(user_id)
     if user_text == None:
