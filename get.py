@@ -9,7 +9,6 @@ def get():
 
     weather_data = []
 
-
     for i in location:
         city = i['locationName']
         wx8 = i['weatherElement'][0]['time'][0]['parameter']['parameterName']
@@ -17,7 +16,6 @@ def get():
         mint8 = i['weatherElement'][2]['time'][0]['parameter']['parameterName']
         ci8 = i['weatherElement'][3]['time'][0]['parameter']['parameterName']
         pop8 = i['weatherElement'][4]['time'][0]['parameter']['parameterName']
-
 
         weather_info = {
             'city': city,
@@ -28,9 +26,6 @@ def get():
             'rain_probability': int(pop8)
         }
 
-
         weather_data.append(weather_info)
-    
-    # print(json.dumps(weather_data, ensure_ascii=False, indent=4)) 
 
     return weather_data
