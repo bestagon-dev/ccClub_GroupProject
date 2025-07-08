@@ -20,3 +20,11 @@ In development, running the app with command:
     --port=5000 \
     --debug
 ```
+
+## `handle_message`, `handle_postback`
+
+- Allocate responsibilities with extracted functions
+- [walrus operator](https://docs.python.org/3/whatsnew/3.8.html#assignment-expressions)
+- [Use `is` operator to confirm `None` value](https://youtu.be/pDhUWOj_a0M?si=bh9tG0TE28DTH6Ju)
+- Check type with `isinstance`
+- Early return to reduce cognitive load of condition branching.
