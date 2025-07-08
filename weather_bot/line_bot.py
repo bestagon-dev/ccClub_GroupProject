@@ -36,6 +36,7 @@ def _functions_description(event: MessageEvent):
 
 def _quick_search(event: MessageEvent):
     from main_function import get_weather_data, make_json
+    from OOP_and_Function import standardized_location
     from storage import get_city
 
     line_bot: LineBotApi = app.line_bot
@@ -47,36 +48,37 @@ def _quick_search(event: MessageEvent):
         )
         return
     
-    data = get_weather_data(city)
-
-    if not isinstance(data, list):
-        # city not found msg
+    if not (standardized_city := standardized_location(city)):
         line_bot.reply_message(
             event.reply_token,
-            TextSendMessage(text=data)
+            TextSendMessage(text=f"找不到 {city} 的天氣資料喔！\n目前僅支援台灣縣市查詢，請輸入完整名稱(例如：臺中市)再次查詢。")
         )
         return
 
-    if len(data) == 2:
-        # list of city
+    if len(standardized_city) > 1:
         reply_message = TextSendMessage(
-            text=f"請問您要查詢 {data[0]} 還是 {data[1]}？",
+            text=f"請問您要查詢 {standardized_city[0]} 還是 {standardized_city[1]}？",
             quick_reply=QuickReply(items=[
-                QuickReplyButton(action=MessageAction(label=data[0], text=data[0])),
-                QuickReplyButton(action=MessageAction(label=data[1], text=data[1])),
+                QuickReplyButton(action=MessageAction(label=standardized_city[0], text=standardized_city[0])),
+                QuickReplyButton(action=MessageAction(label=standardized_city[1], text=standardized_city[1])),
             ])
         )
         line_bot.reply_message(event.reply_token, reply_message)
         return
-    
-    # weather info list
-    message = FlexSendMessage(
-        alt_text="天氣小幫手回傳囉！",
-        contents=make_json(data)
-    )
+
+    if (weather_info := get_weather_data(standardized_city[0])) is None:
+        line_bot.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"找不到 {city} 的天氣資料喔！\n目前僅支援台灣縣市查詢，請輸入完整名稱(例如：臺中市)再次查詢。")
+        )
+        return
+
     line_bot.reply_message(
         event.reply_token,
-        message
+        messages=FlexSendMessage(
+            alt_text = "天氣小幫手回傳囉！",
+            contents = make_json(weather_info)
+        ),
     )
     return
 
