@@ -1,6 +1,9 @@
+from http import HTTPMethod, HTTPStatus
+
 from flask import Flask, jsonify, request, abort
 from dotenv import load_dotenv
 from linebot.exceptions import InvalidSignatureError
+
 
 def create_app() -> Flask:
     load_dotenv()
@@ -12,12 +15,12 @@ def create_app() -> Flask:
     line_bot.init_app(app)
 
 
-    @app.route("/health-check", methods=['GET'])
+    @app.route("/health-check", methods=[HTTPMethod.GET])
     def healthcheck():
-        return jsonify(dict(message="success"))
+        return jsonify(dict(message="success")), HTTPStatus.OK
 
 
-    @app.route("/callback", methods=['POST'])
+    @app.route("/callback", methods=[HTTPMethod.POST])
     def callback():
         signature = request.headers.get("X-Line-Signature")
         body = request.get_data(as_text=True)
@@ -25,8 +28,8 @@ def create_app() -> Flask:
         try:
             app.line_handler.handle(body, signature)
         except InvalidSignatureError:
-            abort(400)
+            abort(HTTPStatus.BAD_REQUEST)
 
-        return "OK", 200
+        return "OK", HTTPStatus.OK
 
     return app

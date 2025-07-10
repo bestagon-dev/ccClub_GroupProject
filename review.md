@@ -59,3 +59,8 @@ Refactor point:
 - Use `namedtuple` / `Typeddict` / `Dataclass` to organize sequence of data ([ref](https://medium.com/@40243105s/how-python-structures-data-set-12dbc86f83ea))
 
 - `serch_city` seems to be a non-sense function?
+
+## Replace hard_coded with Enum / Const
+
+- http.HTTPMethod
+- http.HTTPStatus
