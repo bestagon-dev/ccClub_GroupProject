@@ -1,43 +1,48 @@
+from collections import namedtuple
+
 import OOP_and_Function as fx
+from OOP_and_Function import City
 import get
-import json
+
+DetailedWeatherInfo = namedtuple("DetailedWeatherInfo", field_names=(
+    "city",
+    "weather",
+    "comfort_index",
+    "temp_range",
+    "rain_probability",
+    "temp_reminder",
+    "wearing_suggestion",
+))
 
 #主功能，查詢data
-def get_weather_data(location):
-    weather_data=get.get()
-    #地點名稱查詢
-    weather_dict = {}
-    #標準化地點名稱
-    city_name=fx.standerdize_location(location)
-    if len(city_name)>4 or type(city_name)==list:
-        return city_name
-    for city_data in weather_data:
-        if city_data['city']==city_name:
-            weather_dict = fx.serch_city(city_name, weather_data)
-            break
+def get_weather_data(city: City) -> DetailedWeatherInfo:
+    """
+    Get Weather info according to standardized city name.
+    """
 
-    # 如果沒找到資料
-    if not weather_dict:
-        return f"找不到 {location} 的天氣資料喔！\n目前僅支援台灣縣市查詢，請輸入完整名稱(例如：臺中市)再次查詢。"
-    
-    weather_msg = [
-        weather_dict['city'],
-        weather_dict['weather'],
-        f"🤔 體感狀態：{weather_dict['comfort_index']}",
-        f"🌡 最高：{weather_dict['max_temp']}°C／最低：{weather_dict['min_temp']}°C",
-        f"🌧 降雨機率：{weather_dict['rain_probability']}%",
-    ]
+    cities_weather = get.get()
+    cities_weather = {weather.city: weather for weather in cities_weather}
 
-    #推薦衣著
-    clothes_msg=fx.what_to_wear(**weather_dict)
+    weather = cities_weather.get(city)
 
-    #合併所有資訊並回傳
-    weather_msg.extend(clothes_msg)
-    return weather_msg
+    return DetailedWeatherInfo(
+        city               = weather.city,
+        weather            = weather.weather,
+        comfort_index      = f"🤔 體感狀態：{weather.comfort_index}",
+        temp_range         = f"🌡 最高：{weather.max_temp}°C／最低：{weather.min_temp}°C",
+        rain_probability   = f"🌧 降雨機率：{weather.rain_probability}%",
+        temp_reminder      = fx.get_temp_reminder(weather.max_temp),
+        wearing_suggestion = fx.get_wearing_suggestion(
+            weather.max_temp,
+            weather.min_temp,
+            weather.comfort_index,
+            weather.rain_probability,
+        ),
+    )
 
 #把回傳的天氣訊息做成flex card
-def make_json(weather_reply):
-    weather_json={
+def make_json(weather_info: DetailedWeatherInfo):
+    weather_json = {
     "type": "bubble",
     "body": {
       "type": "box",
@@ -45,7 +50,7 @@ def make_json(weather_reply):
       "contents": [
         {
           "type": "text",
-          "text": weather_reply[0],
+          "text": weather_info.city,
           "weight": "bold",
           "size": "3xl",
           "align": "center",
@@ -63,25 +68,25 @@ def make_json(weather_reply):
             {
               "type": "text",
               "margin": "10px",
-              "text": weather_reply[1],
+              "text": weather_info.weather,
               "align": "center",
               "wrap": True
             },
             {
               "type": "text",
-              "text": weather_reply[2],
+              "text": weather_info.comfort_index,
               "align": "center",
               "wrap": True
             },
             {
               "type": "text",
-              "text": weather_reply[3],
+              "text": weather_info.temp_range,
               "align": "center",
               "wrap": True
             },
             {
               "type": "text",
-              "text": weather_reply[4],
+              "text": weather_info.rain_probability,
               "align": "center",
               "wrap": True
             }
@@ -118,12 +123,12 @@ def make_json(weather_reply):
             },
             {
               "type": "text",
-              "text": weather_reply[5],
+              "text": weather_info.temp_reminder,
               "wrap": True
             },
             {
               "type": "text",
-              "text": weather_reply[6],
+              "text": weather_info.wearing_suggestion,
               "wrap": True
             }
           ],
@@ -144,7 +149,7 @@ def make_json(weather_reply):
           "action": {
             "type": "postback",
             "label": "📌 設為快速查詢城市",
-            "data": f"set_city={weather_reply[0]}"
+            "data": f"set_city={weather_info.city}"
           },
           "color": "#EA7500"
         },
